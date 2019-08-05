@@ -1,5 +1,5 @@
-import heropng from '../images/hero.png';
-import alljpg from '../images/all.jpg';
+import heroPngSrc from '../images/hero.png';
+import allJpgSrc from '../images/all.jpg';
 
 export default function prepare() {
   const imgTask = (img, src) => new Promise((resolve, reject) => {
@@ -14,8 +14,8 @@ export default function prepare() {
   const allSpriteImg = new Image();
 
   const allresourceTask = Promise.all([
-    imgTask(heroImg, heropng),
-    imgTask(allSpriteImg, alljpg),
+    imgTask(heroImg, heroPngSrc),
+    imgTask(allSpriteImg, allJpgSrc),
   ]);
 
   return {

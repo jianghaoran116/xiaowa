@@ -1,23 +1,23 @@
 
 export default function drawHero(context, heroImg, allSpriteImg) {
-  const draw = (obj) => {
-    obj.context
+  function draw() {
+    this.context
       .drawImage(
-        obj.img,
-        obj.imgPos.x,
-        obj.imgPos.y,
-        obj.imgPos.width,
-        obj.imgPos.height,
-        obj.rect.x,
-        obj.rect.y,
-        obj.rect.width,
-        obj.rect.height,
+        this.img,
+        this.imgPos.x,
+        this.imgPos.y,
+        this.imgPos.width,
+        this.imgPos.height,
+        this.rect.x,
+        this.rect.y,
+        this.rect.width,
+        this.rect.height,
       );
-  };
+  }
 
   const hero = {
     img: heroImg,
-    context,
+    context: context,
     imgPos: {
       x: 0,
       y: 0,
@@ -30,11 +30,12 @@ export default function drawHero(context, heroImg, allSpriteImg) {
       width: 40,
       height: 40,
     },
+    draw: draw,
   };
 
   const monster = {
     img: allSpriteImg,
-    context,
+    context: context,
     imgPos: {
       x: 858,
       y: 529,
@@ -47,8 +48,9 @@ export default function drawHero(context, heroImg, allSpriteImg) {
       width: 40,
       height: 40,
     },
+    draw: draw,
   };
 
-  draw(hero);
-  draw(monster);
+  hero.draw();
+  monster.draw();
 }

@@ -23,5 +23,6 @@ module.exports = {
     'no-console': 0,
     'import/no-unresolved': 0,
     'linebreak-style': 0,
+    'object-shorthand': 0,
   },
 };
