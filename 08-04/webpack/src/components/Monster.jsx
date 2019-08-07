@@ -16,6 +16,15 @@ const defaultRect = {
 
 export default function Monster(context, allSpriteImg, imgPos = defaultImgPos, rect = defaultRect) {
   Body.call(this, context, allSpriteImg, imgPos, rect);
+  this.die = function die() {
+    this.context
+      .clearRect(
+        this.rect.x,
+        this.rect.y,
+        this.rect.width,
+        this.rect.height,
+      );
+  };
 }
 
 Monster.prototype = Object.create(Body.prototype);
