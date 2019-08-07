@@ -21,5 +21,5 @@ export default function Monster(context, allSpriteImg, imgPos = defaultImgPos, r
 Monster.prototype = Object.create(Body.prototype);
 
 Monster.prototype.getRect = function getRect() {
-  return this.imgPos;
+  return this.rect;
 };
