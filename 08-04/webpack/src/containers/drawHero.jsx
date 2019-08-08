@@ -3,7 +3,9 @@ import Hero from '../components/Hero';
 
 export default function drawHero(context, heroImg, allSpriteImg) {
   let monster = new Monster(context, allSpriteImg);
+  console.log(monster);
   monster.draw();
+  monster.staticFun();
 
   const hero = new Hero(context, heroImg);
   hero.draw();

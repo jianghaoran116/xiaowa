@@ -1,4 +1,5 @@
 import Body from './Body';
+import inherit from '../helper/inherit';
 
 const defaultImgPos = {
   x: 0,
@@ -14,7 +15,7 @@ const defaultRect = {
   height: 40,
 };
 
-export default function Hero(context, heroImg, imgPos = defaultImgPos, rect = defaultRect) {
+function Hero(context, heroImg, imgPos = defaultImgPos, rect = defaultRect) {
   Body.call(this, context, heroImg, imgPos, rect);
   this.speak = '';
   this.attack = function attack(monster) {
@@ -236,9 +237,11 @@ export default function Hero(context, heroImg, imgPos = defaultImgPos, rect = de
   };
 }
 
-Hero.prototype = Object.create(Body.prototype);
+inherit(Hero, Body);
 
 Hero.prototype.say = function say() {
   document.getElementById('hero-speak').innerText = this.speak;
   return this.speak;
 };
+
+export default Hero;

@@ -1,4 +1,5 @@
 import Body from './Body';
+import inherit from '../helper/inherit';
 
 const defaultImgPos = {
   x: 858,
@@ -14,7 +15,7 @@ const defaultRect = {
   height: 40,
 };
 
-export default function Monster(context, allSpriteImg, imgPos = defaultImgPos, rect = defaultRect) {
+function Monster(context, allSpriteImg, imgPos = defaultImgPos, rect = defaultRect) {
   Body.call(this, context, allSpriteImg, imgPos, rect);
   this.die = function die() {
     this.context
@@ -27,8 +28,10 @@ export default function Monster(context, allSpriteImg, imgPos = defaultImgPos, r
   };
 }
 
-Monster.prototype = Object.create(Body.prototype);
+inherit(Monster, Body);
 
 Monster.prototype.getRect = function getRect() {
   return this.rect;
 };
+
+export default Monster;

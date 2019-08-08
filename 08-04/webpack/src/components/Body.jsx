@@ -3,6 +3,10 @@ export default function Body(context, heroImg, imgPos, rect) {
   this.context = context;
   this.imgPos = imgPos;
   this.rect = rect;
+
+  this.staticFun = function staticFun() {
+    console.log(this.img);
+  };
 }
 
 Body.prototype = {
