@@ -1,9 +1,12 @@
 import Monster from '../components/Monster';
 import Hero from '../components/Hero';
+// import ConstructCell from '../components/ConstructCell';
 
 export default function drawHero(context, heroImg, allSpriteImg) {
+  // const constructCell = ConstructCell(context, allSpriteImg);
+  // constructCell.draw();
+
   let monster = new Monster(context, allSpriteImg);
-  console.log(monster);
   monster.draw();
   monster.staticFun();
 
