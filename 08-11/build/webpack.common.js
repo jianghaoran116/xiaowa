@@ -24,7 +24,7 @@ const plugins = [
 
 module.exports = {
   entry: {
-    main: './src/index.jsx',
+    main: './src/index.js',
   },
   module: {
     rules: [

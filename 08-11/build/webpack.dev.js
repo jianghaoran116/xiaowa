@@ -13,20 +13,20 @@ const devConfig = {
     port: 8383,
     hot: true,
     historyApiFallback: true,
-    // proxy: {
-    //   'xxx': {
-    //     'target': 'xxx',
-    //     'secure': false, //https
-    //     'pathRewrite': {
-    //       'xxx': 'xxx'
-    //     },
-    //     'changeOrigin': true,
-    //     'header': {
-    //       host: '',
-    //       cookie: ''
-    //     }
-    //   }
-    // }
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8099',
+        secure: false, // https
+        pathRewrite: {
+          '^/api': '',
+        },
+        // 'changeOrigin': true,
+        // 'header': {
+        //   host: '',
+        //   cookie: ''
+        // }
+      },
+    },
   },
   module: {
     rules: [
