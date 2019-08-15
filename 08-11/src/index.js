@@ -1,9 +1,14 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable class-methods-use-this */
 /**
  * @file 文件入口
  */
 import * as utils from './utils';
-// import components from './items/index';
+import components from './items';
+
+import './styles/index.css';
+
+const THRESHOLD = 50;
 
 class Manager {
   constructor($root) {
@@ -12,6 +17,7 @@ class Manager {
 
   init() {
     this.appendData();
+    this.detectReachBottom(() => this.appendData());
   }
 
   getData() {
@@ -28,18 +34,29 @@ class Manager {
   appendData() {
     this.getData()
       .then((res) => {
-        console.log(res);
-        // const items = res.data;
-        // items.forEach((item) => {
-        //   const componentName = item.type
-        //     .replace(/^\w/g, w => w.toUpperCase());
-        //   const Component = components[componentName];
-        //   const currentComponent = new Component(item);
-        //   const element = currentComponent.constructElement();
-        //   this.$root.append(element);
-        // });
+        const items = res.data;
+        items.forEach((item) => {
+          const componentName = item.type
+            .replace(/^\w/g, w => w.toUpperCase()); // 首字母转换大小写
+          const Component = components[componentName];
+          const currentComponent = new Component(item);
+          const element = currentComponent.constructElement();
+          this.$root.append(element);
+        });
         // localStorage.setItem('');
       });
+  }
+
+  detectReachBottom(callback = () => {}) {
+    window.onscroll = () => {
+      const offsetHeight = document.documentElement.offsetHeight;
+      const screenHeight = window.screen.height;
+      const scrollY = window.scrollY;
+      const gap = offsetHeight - screenHeight - scrollY;
+      if (gap < THRESHOLD) {
+        callback();
+      }
+    };
   }
 
   static getInstance($root) {
