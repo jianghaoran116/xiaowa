@@ -1,0 +1,18 @@
+.big-single-pic {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid red;
+  margin: 10px;
+  padding: 10px;
+}
+
+.big-single-pic-content {
+  // flex: 2;
+  font-size: 17px;
+  padding: 5px;
+}
+
+.big-single-pic-img {
+  width: 100%;
+  display: block;
+}
