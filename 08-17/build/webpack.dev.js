@@ -17,10 +17,12 @@ const devConfig = {
     historyApiFallback: true,
     before: (app) => {
       app.get('/list', (req, res) => {
-        const fileName = `../mock/list_${req.query.tab}.json`;
-        const backupFileName = '../mock/list.json';
+        const fileName = `./mock/list_${req.query.tab}.json`;
+        const backupFileName = './mock/list.json';
         fs.exists(fileName, (exists) => {
+          console.log(exists);
           fs.readFile(exists ? fileName : backupFileName, (err, content) => {
+            console.log(backupFileName);
             res.send(content);
           });
         });
