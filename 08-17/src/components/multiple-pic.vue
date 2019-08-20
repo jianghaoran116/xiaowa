@@ -1,11 +1,11 @@
 <template>
   <div class="item multiple-image">
     <h3>
-      {{item.data.title}}
+      {{title}}
     </h3>
     <div class="image-list">
       <img 
-        v-for="(image, idx) in item.data.imageList" :key="idx" 
+        v-for="(image, idx) in imageList" :key="idx" 
         v-bind:src="image" 
       />
     </div>
@@ -14,6 +14,6 @@
 
 <script>
 export default {
-  props: ['item']
+  props: ['title', 'imageList']
 }
 </script>

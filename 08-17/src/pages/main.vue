@@ -3,12 +3,15 @@
     <div v-for="(item, idx) in listData" :key="idx">
       <multiple-pic
         v-if="item.type==='multiplePic'"
-        v-bind:item="item"
+        v-bind="item.data"
       ></multiple-pic>
       <single-pic
-        v-else
-        v-bind:item="item"
+        v-else-if="item.type==='singlePic'"
+        v-bind="item.data"
       ></single-pic>
+      <Agriculture
+        v-else
+      ></Agriculture>
     </div>
   </div>
 </template>
@@ -17,11 +20,13 @@
 
 import MultiplePic from '../components/multiple-pic.vue';
 import SinglePic from '../components/single-pic.vue';
+import Agriculture from '../components/agriculture.vue';
 
 export default {
   components: {
     MultiplePic,
-    SinglePic
+    SinglePic,
+    Agriculture,
   },
   data() {
     return {
@@ -34,7 +39,7 @@ export default {
   },
   methods: {
     getListData() {
-      return fetch('./list')
+      return fetch('./list?tab=agriculture')
         .then(res => res.json())
         .then(res => res.data)
     }
