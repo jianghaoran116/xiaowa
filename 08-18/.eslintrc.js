@@ -19,11 +19,15 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
+  plugins: [
+    'vue'
+  ],
   rules: {
     'no-console': 0,
     'import/no-unresolved': 0,
     'linebreak-style': 0,
     'object-shorthand': 0,
     'max-len': 0,
+    'vetur.validation.template': false,
   },
 };
