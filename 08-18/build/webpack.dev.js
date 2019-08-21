@@ -60,24 +60,24 @@ const devConfig = {
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: true,
-            },
-          },
+          // {
+          //   loader: MiniCssExtractPlugin.loader,
+          //   options: {
+          //     hmr: true,
+          //   },
+          // },
           {
             loader: 'vue-style-loader',
           },
           {
             loader: 'css-loader',
-            options: {
-              importLoaders: 2,
-              modules: true,
-            },
+            // options: {
+            //   importLoaders: 2,
+            //   modules: true,
+            // },
           },
-          'postcss-loader',
-          'sass-loader',
+          // 'postcss-loader',
+          // 'sass-loader',
         ],
       },
       // {
