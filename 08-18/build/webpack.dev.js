@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const commonConfig = require('./webpack.common.js');
