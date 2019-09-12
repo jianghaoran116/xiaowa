@@ -1,12 +1,58 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-    <head>
-      <title>逻辑层</title>
-      <script type="text/javascript" src="./service.js"></script>
-    </head>
-    <body>
-      <script type="text/javascript">
-      
-      </script>
-    </body>
+<head>
+	<title>逻辑层</title>
+	<style type="text/css">
+		.view {
+			height: 100vh;
+			width: 100vw;
+			padding: 0;
+		}
+	</style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+</head>
+<body>
+	<script type="text/javascript" src="./bridge.js"></script>
+	<script type="text/javascript" src="./service.js"></script>
+  <script type="text/javascript">
+    /**
+     * 开发者代码
+     * 这里就是拿到一个页面进行渲染 
+     */
+		window.appJson = {
+		  "pages": [
+		    "pages/index/index",
+		    "pages/detail/detail"
+		  ],
+		  "window": {
+		    "backgroundTextStyle": "light",
+		    "navigationBarBackgroundColor": "#fff",
+		    "navigationBarTitleText": "头条",
+		    "navigationBarTextStyle": "black"
+		  },
+		  "sitemapLocation": "sitemap.json"
+		};
+
+    /**
+     * 编译后的小程序里的Page方法
+     * Page理解为类，会用里面的对象当原型
+     */ 
+		Page('pages/index/index', {
+			data: {
+				name: '我太难了'
+			},
+
+			onShow() {
+				console.log('xxxx');
+			}
+		});
+  </script>
+  <script type="text/javascript">
+    /**
+     * 小程序做的事情 初始化
+     */
+		window.logic.init();
+	</script>
+</body>
 </html>
