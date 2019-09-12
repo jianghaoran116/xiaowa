@@ -22,7 +22,7 @@ class Bridge {
 	}
 
 	/**
-	 * 逻辑层向视图层发消息
+	 * 发消息
 	 * @param {String} [id] - 视图的唯一标识
 	 * @param {Object} [params] - 需要set的数据
 	 */
@@ -31,6 +31,10 @@ class Bridge {
 		target.contentWindow.postMessage(params);
 	}
 
+	/**
+	 * 接受消息
+	 * @param {*} callback 
+	 */
 	onMessage(callback) {
 		window.addEventListener('message', function (event) {
 			callback && callback(event.data);
