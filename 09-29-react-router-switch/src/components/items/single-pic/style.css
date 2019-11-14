@@ -1,0 +1,7 @@
+.single-pic {
+    display: flex;
+}
+
+.single-pic img {
+    width: 33%
+}
