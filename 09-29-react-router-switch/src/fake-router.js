@@ -169,6 +169,7 @@ export class Router extends Component {
 	}
 }
 
+// Switch组件 思路是匹配子组件，匹配到了就渲染 没匹配到再判断一下最后子组件是否设置了path， 如果没有就渲染，做404页面
 export class Switch extends Component {
 	static contextType = RouterContext;
 	constructor(props) {
