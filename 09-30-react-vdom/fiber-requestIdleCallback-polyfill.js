@@ -1,11 +1,17 @@
 /**
- * react是使用的requestAnimationFrame来模拟实现的requestidlecallback
- * requestIdleCallback polyfill版本
- * requestAnimationFrame 该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行
- * 参考React scheduler
- * 任务通过双向链表链接起来 
- * 然后通过requestAnimationFrame或者setTimeout来获取浏览器在每帧的空闲时间来循环处理所有的任务，直到链表为空为止
+ * 多次 空闲 渲染过后
+ * 流程
+ * 1: 每个任务有个优先级 设置优先级
+ * 2: 在调度之前 如果过期 直接调用 不需要调度 如果没有过期 通过requestAnimationFrame启动一个定时器
+ * 3: 在回调方法中执行计算 frame时间及下个frame时间 执行port.message (meassageChannel)
  */
+
+let isAnimationFrameScheduled;  
+let rAFID; // requestAnimationFrame
+let rAFTimeoutID; // requestAnimationFrame不起作用时用timeout
+let isMessageEventScheduled;
+let timeoutTime;
+let scheduledHostCallback;
 
 // 假装设置下优先级
 const IMMEDIATE_PRIORITY_TIMEOUT = 1;
@@ -13,13 +19,12 @@ const USER_BLOCKING_PRIORITY = 2;
 const IDLE_PRIORITY = 3;
 const LOW_PRIORITY_TIMEOUT = 4;
 const NORMAL_PRIORITY_TIMEOUT = 5;
-
 /**
  * 现模拟设置一个任务
  * 根据传入的option计算出过期时间
  * @param {*} string 
  */
-function requestIdleCallback(callback, option) {
+function requestIdleCallbackPolyfll(callback, option) {
   // performance.now() 使用当前时间
   var startTime = performance.now();
   // 过期时间
@@ -42,32 +47,26 @@ function requestIdleCallback(callback, option) {
       expirationTime = startTime + NORMAL_PRIORITY_TIMEOUT;
   }
 
-  
   // 安排一下
-  ensureHostCallbackIsScheduled(callback, expirationTime)
-}
-
-/**
- * 在这个过程中我们首先需要去判断当前时间是否小于下一帧时间
- * 如果小于的话就代表我们尚有空余时间去执行任务
- * 如果大于的话就代表当前帧已经没有空闲时间了
- * 这时候我们需要去判断是否有任务过期
- * 过期的话不管三七二十一还是得去执行这个任务
- * 如果没有过期的话
- * 那就只能把这个任务丢到下一帧看能不能执行了
- */
-function ensureHostCallbackIsScheduled(callback, expirationTime) {
-  console.log(expirationTime)
-  console.log(performance.now()) // 默认设置30
+  requestHostCallback(callback, expirationTime)
 }
 
 /**
  * 开始安排任务， absoluteTimeout是传入的过期时间
+ * 2: 在调度之前 如果过期 直接调用 不需要调度 如果没有过期 通过requestAnimationFrame启动一个定时器
  * @param {*} callback 
  * @param {*} absoluteTimeout 
  */
-function requestHostCallback(callback, absoluteTimeout) {
-  port.postMessage(undefined);
+function requestHostCallback(callback, expirationTime) {
+  let absoluteTimeout = performance.now() - expirationTime - 16.6;
+  scheduledHostCallback = callback;
+  timeoutTime = absoluteTimeout;
+  if (absoluteTimeout < 0) {
+    port.postMessage(undefined);
+  } else if (!isAnimationFrameScheduled){
+    isAnimationFrameScheduled = true;
+    requestAnimationFrameWithTimeout(callback);
+  }
 }
 
 /**
@@ -76,32 +75,52 @@ function requestHostCallback(callback, absoluteTimeout) {
  * 老师说的浏览器到后台的时候
  */
 function requestAnimationFrameWithTimeout(callback) {
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame(callback);
-  } else {
-    setTimeout(callback, 100);
-  };
+  rAFID = requestAnimationFrame(function(timestamp) {
+    // cancel the setTimeout
+    clearTimeout(rAFTimeoutID);
+    callback(timestamp);
+  });
+  rAFTimeoutID = setTimeout(function() {
+    // cancel the requestAnimationFrame
+    cancelAnimationFrame(rAFID);
+    callback(performance.now());
+  }, 100);
 }
 
 /**
- * 
+ * 要执行的任务
  */
 function animationTick() {
-
+  console.log(123)
+  if (scheduledHostCallback !== null) {
+    requestAnimationFrameWithTimeout(animationTick);
+  } else {
+    isAnimationFrameScheduled = false;
+    return;
+  }
+  if (!isMessageEventScheduled) {
+    isMessageEventScheduled = true;
+    port.postMessage(undefined);
+  }
 }
 
 /**
- * 我们使用postMessage 技巧来将空闲工作推迟到重绘之后
+ * 使用postMessage 技巧来将空闲工作推迟到重绘之后
  */
 var channel = new MessageChannel();
 var port = channel.port2;
 
 channel.port1.onmessage = function (event) {
-  // requestAnimationFrameWithTimeout(test)
+  isMessageEventScheduled = false;
+  var prevScheduledCallback = scheduledHostCallback;
+  var prevTimeoutTime = timeoutTime;
+  if (!isAnimationFrameScheduled) {
+    isAnimationFrameScheduled = true;
+    requestAnimationFrameWithTimeout(animationTick);
+  }
+  scheduledHostCallback = prevScheduledCallback;
+  timeoutTime = prevTimeoutTime;
+  return;
 };
 
-function test() {
-  console.log(123123)
-}
-
-requestIdleCallback(test, 'ImmediatePriority');
+requestIdleCallbackPolyfll(animationTick, 'ImmediatePriority');

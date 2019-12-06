@@ -32,7 +32,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         // loader: 'babel-loader',
-        use: ['babel-loader', 'eslint-loader'],
+        use: ['babel-loader'],
       },
       {
         test: /\.(jpg|png|gif)$/,
